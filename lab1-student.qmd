@@ -2,7 +2,11 @@
 title: "Lab 1: Introduction to Quarto"
 author: "Zhi He"
 date: "09/26/2024"
-format: html
+format: 
+  html:
+    code-fold: true        # Enables code folding for all code chunks
+    toc: true              # Adds a table of contents
+    theme: united
 editor: source
 embed-resources: true
 execute:
@@ -66,6 +70,8 @@ data(ToothGrowth)
 
 # Look at the summary of the variables in the dataset.
 summary(ToothGrowth)
+
+print(ToothGrowth)
 ```
 
 ## Creating a Plot
@@ -102,3 +108,27 @@ Now, run this code chunk! You should see two side-by-side boxplots, one plot com
 **Question 8** -- Specify in the code chunk options that these boxplots should be **center aligned**.
 
 **Question 9** -- Specify a **figure caption** for the boxplots (using a code-chunk option).
+
+# t-test for tooth length between two supplement methods in the ToothGrowth dataset.
+
+```{r}
+# Load the ToothGrowth dataset (should be available in base R)
+data(ToothGrowth)
+
+# Perform the two-sample t-test with unequal variances (Welch's t-test)
+t_test_result <- t.test(len ~ supp, data = ToothGrowth, 
+                        var.equal = FALSE, 
+                        alternative = "two.sided")
+
+# Print the result
+print(t_test_result)
+```
+
+1.  Conclusion Based on the p-value:
+    1.  The p-value is 0.06063, which is slightly above the commonly used significance level of 0.05.
+    2.  So there is not enough evidence to reject the null hypothesis at the 5% significance level.
+    3.  Conclusion: We fail to reject the null hypothesis. The data suggests that there is no statistically significant difference in mean tooth length between OJ and VC supplements.
+2.  Interpretation of confidence interval:
+    1.  The 95% confidence interval is: \[-0.171, 7.571\]/
+    2.  The default confidence level for the t.test() function in R is 95%.
+    3.  The confidence interval includes 0 (no difference), which supports the conclusion that the true difference between the groups might be zero.
